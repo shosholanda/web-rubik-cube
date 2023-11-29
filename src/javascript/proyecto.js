@@ -44,8 +44,7 @@ window.addEventListener("load", async function(evt) {
 
     let geometry = [
 	new CG.PrismaRectangular(
-	    gl, 
-		1, 1, 1
+	    gl
 		)
     ];
 
@@ -71,7 +70,7 @@ window.addEventListener("load", async function(evt) {
 			gl, 
 			projectionMatrix, 
 			viewMatrix, 
-			[lightPosView.x, lightPosView.y, lightPosView.z]
+			[lightPosView.x, lightPosView.y, lightPosView.w]
 		  );
 		}
 	  }

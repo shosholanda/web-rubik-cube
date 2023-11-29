@@ -51,9 +51,9 @@ var CG = (function(CG) {
 		  v3.set( vertices[i+6], vertices[i+7], vertices[i+8] );
 		  n = CG.Vector3.cross(CG.Vector3.subtract(v1, v2), CG.Vector3.subtract(v2, v3)).normalize();
 		  normals.push(
-			n.x, n.y, n.z, 
-			n.x, n.y, n.z, 
-			n.x, n.y, n.z
+			n.x, n.y, n.w, 
+			n.x, n.y, n.w, 
+			n.x, n.y, n.w
 		  );
 		}
   

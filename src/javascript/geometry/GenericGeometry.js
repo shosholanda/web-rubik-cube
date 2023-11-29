@@ -190,9 +190,9 @@ var CG = (function(CG) {
           v3.set( vertices[i+6], vertices[i+7], vertices[i+8] );
           n = CG.Vector3.cross(CG.Vector3.subtract(v1, v2), CG.Vector3.subtract(v2, v3)).normalize();
           normals.push(
-            n.x, n.y, n.z, 
-            n.x, n.y, n.z, 
-            n.x, n.y, n.z
+            n.x, n.y, n.w, 
+            n.x, n.y, n.w, 
+            n.x, n.y, n.w
           );
         }
       
@@ -225,19 +225,19 @@ var CG = (function(CG) {
           tmp = CG.Vector3.add(tmp, n);
           normals[i1  ] = tmp.x;
           normals[i1+1] = tmp.y;
-          normals[i1+2] = tmp.z;
+          normals[i1+2] = tmp.w;
       
           tmp.set( normals[i2], normals[i2+1], normals[i2+2] );
           tmp = CG.Vector3.add(tmp, n);
           normals[i2  ] = tmp.x;
           normals[i2+1] = tmp.y;
-          normals[i2+2] = tmp.z;
+          normals[i2+2] = tmp.w;
       
           tmp.set( normals[i3], normals[i3+1], normals[i3+2] );
           tmp = CG.Vector3.add(tmp, n);
           normals[i3  ] = tmp.x;
           normals[i3+1] = tmp.y;
-          normals[i3+2] = tmp.z;
+          normals[i3+2] = tmp.w;
         }
       
         for (let i=0; i<normals.length; i+=3) {
@@ -245,7 +245,7 @@ var CG = (function(CG) {
           tmp = tmp.normalize();
           normals[i  ] = tmp.x;
           normals[i+1] = tmp.y;
-          normals[i+2] = tmp.z;
+          normals[i+2] = tmp.w;
         }
       
         return normals;

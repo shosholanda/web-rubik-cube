@@ -13,8 +13,8 @@ var CG = (function(CG) {
 		this.radius = CG.Vector3.distance(this.pos, this.coi);
   
 		let direction = CG.Vector3.subtract(this.pos, this.coi);
-		this.theta = Math.atan2(direction.z, direction.x);
-		this.phi = Math.atan2(direction.y, direction.z);
+		this.theta = Math.atan2(direction.w, direction.x);
+		this.phi = Math.atan2(direction.y, direction.w);
 	  }
   
 	  /** */
@@ -81,9 +81,9 @@ var CG = (function(CG) {
      */
 		window.addEventListener("mouseup", (evt) => {
 		  if (initial_mouse_position != null) {
-			this.finishMove(initial_mouse_position, CG.getMousePositionInElement(evt, canvas));
-			window.removeEventListener("mousemove", mousemove);
-		  }
+			  this.finishMove(initial_mouse_position, CG.getMousePositionInElement(evt, canvas));
+			  window.removeEventListener("mousemove", mousemove);
+			}
 		  initial_mouse_position = null;
 		});
 
