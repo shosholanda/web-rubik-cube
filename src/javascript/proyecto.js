@@ -28,7 +28,7 @@ window.addEventListener("load", async function(evt) {
 	let projectionMatrix = CG.Matrix4.perspective(75*Math.PI/180, aspect, zNear, zFar);
 
     let camera = new CG.TrackballCamera(
-	new CG.Vector3(5, 5, 5),
+	new CG.Vector3(3, 3, 3),
 	new CG.Vector3(0, 0, 0),
 	new CG.Vector3(0, 1, 0)
     );
@@ -38,17 +38,21 @@ window.addEventListener("load", async function(evt) {
 	
     /////////////////////////////////////////
 	//  Crear objetos con materiales
-	let image;
-	image = await CG.loadImage("../../textures/img/Blue.png");
+	let blue = await CG.loadImage("../../textures/img/Blue.png");
+	let red = await CG.loadImage("../../textures/img/Red.png");
+	let green = await CG.loadImage("../../textures/img/Green.png");
+	let orange = await CG.loadImage("../../textures/img/Orange.png");
+	let white = await CG.loadImage("../../textures/img/White.png");
+	let yellow = await CG.loadImage("../../textures/img/Yellow.png");
+	
 	
 
     let geometry = [
 		new CG.PrismaRectangular(
-			gl
+			gl,
+			1, 1, 1,
+			new CG.TextureMaterial(gl, yellow)
 		),
-		new CG.Teapot(
-			gl
-		)	
     ];
 
 	//////////////////////////////////////////

@@ -59,6 +59,23 @@ var CG = (function(CG) {
   
 		return normals;
 	  }
+
+	  getUVCoords(){
+		let uv = [
+			0, 0,
+			1, 1,
+			1, 0,
+
+			0, 0,
+			1, 0,
+			1, 1,
+		]
+		let uvs = []
+		for (let i = 0; i < 6; i++){
+			uvs = uvs.concat(uv)
+		}
+		return uvs
+	  }
 	}
 
 

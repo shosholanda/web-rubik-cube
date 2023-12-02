@@ -20,6 +20,7 @@
 	<script type="text/javascript" src="javascript/geometry/GenericGeometry.js"></script>
 	<script type="text/javascript" src="javascript/geometry/PrismaRectangular.js"></script>
   <script type="text/javascript" src="javascript/geometry/Teapot.js"></script>
+  <script type="text/javascript" src="javascript/geometry/Plano.js"></script>
   <script type="text/javascript" src="javascript/geometry/Cubie.js"></script>
   
 	<script type="text/javascript" src="javascript/util/TrackballCamera.js"></script>
@@ -30,95 +31,6 @@
 
   <body>
     <canvas id="the_canvas" width="800" height="600" style="border: 1px dotted gray;"></canvas>
-    
-    <script id="vertex-shader" type="vertex-shader">
-      attribute vec4 a_position;
-      attribute vec3 a_normal;
-      
-      attribute vec2 a_texcoord;
-
-      uniform mat4 u_PVM_matrix;
-      uniform mat4 u_VM_matrix;
-
-      varying vec3 v_position;
-      varying vec3 v_normal;
-      varying vec2 v_texcoord;
-
-      void main() {
-	  v_normal = vec3( u_VM_matrix* vec4(a_normal, 0));
-	  v_position = vec3(u_VM_matrix* a_position);
-	  v_texcoord = a_texcoord;
-	  gl_Position = u_PVM_matrix * a_position;
-      }
-    </script>
-
-    <script id="fragment-shader" type="fragment-shader">
-      // Reflexion difusa 
-      precision mediump float;
-
-      varying vec3 v_position;
-      varying vec3 v_normal;
-      
-      varying vec2 v_texcoord;
-      uniform sampler2D u_texture;
-
-      uniform vec3 u_light_position;
-      uniform vec4 u_color;
-
-      void main() {
-	  vec3 to_light = normalize( u_light_position - v_position);
-	  vec3 fragment_normal = normalize(v_normal);
-
-	  float cos_angle = max(dot( fragment_normal, to_light), 0.0);
-
-	  // gl_FragColor = vec4(vec3(u_color) * cos_angle, u_color.a);
-	  gl_FragColor = texture2D(u_texture, v_texcoord);
-      }
-    </script>
-    <script id="specular" type="fragment-shader">
-      // Reflexiń phong (no especular) 
-      precision mediump float;
-
-      varying vec3 v_normal;
-      varying vec3 v_position;
-
-      varying vec2 v_texcoord;
-      uniform sampler2D u_texture;
-
-      uniform vec3 u_light_position;
-      uniform vec4 u_color;
-      uniform vec3 u_camera_position;
-      //Quiero q tenga un poco de luz ambiental
-      void main(){
-	  vec3 to_light = normalize( u_light_position - v_position);
-          vec3 to_camera = normalize( u_camera_position - v_position);
-	  vec3 fragment_normal = normalize(v_normal);
-	  vec3 r_vect = fragment_normal * dot( fragment_normal , to_light);
-	  r_vect = 2. * r_vect;
-	  r_vect = r_vect - to_light;
-	  
-
-	  // NO salió como en la foto :( pero se hizo el intento y se aprendió
-	  // Suplico piedad!! 
-	  float brightness = 10.0;
-
-	  float cos_angle = max(dot( r_vect, to_camera), 0.0);
-	  cos_angle = pow(cos_angle, brightness);
-	  
-
-	  // gl_FragColor = vec4(vec3(u_color) * cos_angle, u_color.a)*.5;
-
-	  //Luz especular
-	  to_light = normalize( u_light_position - v_position);
-	  fragment_normal = normalize(v_normal);
-
-	  cos_angle = max(dot( fragment_normal, to_light), 0.0);
-
-	  // gl_FragColor = gl_FragColor + vec4(vec3(u_color) * cos_angle, u_color.a);
-	  gl_FragColor = texture2D(u_texture, v_texcoord);
-      }
-    </script>
-
   </body>
 
 </html>

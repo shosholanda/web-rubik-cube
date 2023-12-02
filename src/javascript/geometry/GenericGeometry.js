@@ -162,11 +162,11 @@ var CG = (function(CG) {
   
           // enviamos la información de las coordenadas de textura y la textura
           if (this.UVBuffer || this.material.texture) {
-            this.material.setAttribute(gl, "a_texcoord", this.UVBuffer, 2, gl.FLOAT, false, 0, 0);
+            this.material.setAttribute(gl, "a_uv0", this.UVBuffer, 2, gl.FLOAT, false, 0, 0);
   
             gl.activeTexture(gl.TEXTURE0);
             gl.bindTexture(gl.TEXTURE_2D, this.material.texture);
-            this.material.setUniform(gl, "u_texture", 0);
+            this.material.setUniform(gl, "u_texture0", 0);
           }
   
           // dibujado
