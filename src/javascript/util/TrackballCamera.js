@@ -16,6 +16,10 @@ var CG = (function(CG) {
 		this.theta = Math.atan2(direction.w, direction.x);
 		this.phi = Math.atan2(direction.y, direction.w);
 	  }
+
+	  getPos(){
+		return new CG.Vector4(this.pos.x, this.pos.y, this.pos.z, 1);
+	  }
   
 	  /** */
 	  getMatrix() {

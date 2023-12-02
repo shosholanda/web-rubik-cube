@@ -10,9 +10,9 @@ window.addEventListener("load", async function(evt) {
    
     /////////////////////////////////////////
 	//  Luz
-    let lx = 0;
+    let lx = 3;
     let ly = 3;
-    let lz = 0;
+    let lz = 3;
 
 	let luz = new CG.Vector4(lx, ly, lz, 1);
 	let lightPosition = luz
@@ -28,7 +28,7 @@ window.addEventListener("load", async function(evt) {
 	let projectionMatrix = CG.Matrix4.perspective(75*Math.PI/180, aspect, zNear, zFar);
 
     let camera = new CG.TrackballCamera(
-	new CG.Vector3(0, 11, 7),
+	new CG.Vector3(5, 5, 5),
 	new CG.Vector3(0, 0, 0),
 	new CG.Vector3(0, 1, 0)
     );
@@ -43,9 +43,12 @@ window.addEventListener("load", async function(evt) {
 	
 
     let geometry = [
-	new CG.PrismaRectangular(
-	    gl
-		)
+		new CG.PrismaRectangular(
+			gl
+		),
+		new CG.Teapot(
+			gl
+		)	
     ];
 
 	//////////////////////////////////////////
@@ -62,15 +65,16 @@ window.addEventListener("load", async function(evt) {
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
 		viewMatrix = camera.getMatrix();
-	
+
+		lightPosition = camera.getPos();
 		lightPosView = viewMatrix.multiplyVector(lightPosition);
-	
+		
 		for (let i=0; i<geometry.length; i++) {
 		  geometry[i].draw(
 			gl, 
 			projectionMatrix, 
 			viewMatrix, 
-			[lightPosView.x, lightPosView.y, lightPosView.w]
+			[lightPosView.x, lightPosView.y, -lightPosView.z] //No entiendo porqué es con -
 		  );
 		}
 	  }
