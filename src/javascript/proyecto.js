@@ -51,7 +51,7 @@ window.addEventListener("load", async function(evt) {
 		new CG.PrismaRectangular(
 			gl,
 			1, 1, 1,
-			new CG.TextureMaterial(gl, [blue, red, green])
+			new CG.TextureMaterial(gl, [blue, red, green, orange, white, yellow])
 		),
     ];
 

@@ -161,15 +161,13 @@ var CG = (function(CG) {
           this.material.setAttribute(gl, "a_normal", this.flatNormalBuffer, 3, gl.FLOAT, false, 0, 0);
   
           // enviamos la información de las coordenadas de textura y la textura
+          // OJO: Solo es para 1 textura. 
           if (this.UVBuffer && this.material.textures) {
-            for (let i = 0; i < this.material.textures.length; i++){
-
-              this.material.setAttribute(gl, "a_uv" + i, this.UVBuffer, 2, gl.FLOAT, false, 0, 0);
-    
-              gl.activeTexture(gl.TEXTURE0 + i);
-              gl.bindTexture(gl.TEXTURE_2D, this.material.textures[i]);
-              this.material.setUniform(gl, "u_texture" + i, 0);
-            }
+            this.material.setAttribute(gl, "a_texcoord", this.UVBuffer, 2, gl.FLOAT, false, 0, 0);
+  
+            gl.activeTexture(gl.TEXTURE0);
+            gl.bindTexture(gl.TEXTURE_2D, this.material.textures[0]);
+            this.material.setUniform(gl, "u_texture" , 0);
           }
   
           // dibujado

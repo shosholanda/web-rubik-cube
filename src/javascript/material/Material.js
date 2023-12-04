@@ -165,6 +165,9 @@ var CG = (function(CG) {
           else if (type === gl.FLOAT_MAT4) {
             gl.uniformMatrix4fv(unif, false, data);
           }
+          else if (type === gl.SAMPLER_2D) {
+            gl.uniform1i(unif, data);
+          }
         }
       }
     }

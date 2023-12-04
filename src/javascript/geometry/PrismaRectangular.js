@@ -13,6 +13,39 @@ var CG = (function(CG) {
   
 		super(gl, material, color, initial_transform);
 	  }
+
+	  /**
+     * Se sobre escribe la función de dibujar de GenericGeometry para soportar las múltiples texturas
+     */
+	draw(gl, projectionMatrix, viewMatrix, light_pos) {
+		// SUPER
+		gl.useProgram(this.material.program);
+		this.material.setUniform(gl, "u_color", this.color);
+		this.material.setUniform(gl, "u_light_position", light_pos);
+		this.material.setUniform(gl, "u_light_color", [1,1,1]);
+		this.material.setUniform(gl, "u_shininess", this.material.shininess);
+		let viewModelMatrix = CG.Matrix4.multiply(viewMatrix, this.initial_transform);
+		this.material.setUniform(gl, "u_VM_matrix", viewModelMatrix.toArray());
+		let projectionViewModelMatrix = CG.Matrix4.multiply(projectionMatrix, viewModelMatrix);
+		this.material.setUniform(gl, "u_PVM_matrix", projectionViewModelMatrix.toArray());
+		this.material.setAttribute(gl, "a_position", this.flatPositionBuffer, 3, gl.FLOAT, false, 0, 0);
+		this.material.setAttribute(gl, "a_normal", this.flatNormalBuffer, 3, gl.FLOAT, false, 0, 0);
+  
+		// Lo único que cambia es que el uv tiene 3 indices (u, v) + #tex
+		// Y vamos iterando a través de las texturas anteriormente cargadas.
+		if (this.UVBuffer || this.material.texture) {
+		  this.material.setAttribute(gl, "a_texcoord", this.UVBuffer, 3, gl.FLOAT, false, 0, 0);
+  
+		  for (let i=0; i<this.material.textures.length; i++) {
+			gl.activeTexture(gl["TEXTURE"+i]);
+			gl.bindTexture(gl.TEXTURE_2D, this.material.textures[i]);
+			this.material.setUniform(gl, "u_texture"+i, i);
+		  }
+		}
+  
+		// dibujado
+		gl.drawArrays(gl.TRIANGLES, 0, this.flatNumElements);
+	  }
   
 	  /**
 	   */
@@ -72,7 +105,9 @@ var CG = (function(CG) {
 		]
 		let uvs = []
 		for (let i = 0; i < 6; i++){
-			uvs = uvs.concat(uv)
+			for (let j = 0; j < uv.length; j+=2){
+				uvs.push(uv[j], uv[j+1], i)
+			}
 		}
 		return uvs
 	  }

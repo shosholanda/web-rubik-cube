@@ -8,47 +8,62 @@ var CG = (function(CG) {
           attribute vec4 a_position;
 
           //Coordenadas UV de las texturas
-          attribute vec2 a_uv0;  
-          attribute vec2 a_uv1;
-          attribute vec2 a_uv2;
+          attribute vec3 a_texcoord;  
           
           uniform mat4 u_PVM_matrix;
           
           // Variables para el shader de fragmentos
-          varying vec2 v_texcoord0;
-          varying vec2 v_texcoord1;
-          varying vec2 v_texcoord2;
+          varying vec2 v_texcoord;
+          varying float v_textureIndex;
       
           void main() {
             gl_Position = u_PVM_matrix * a_position;
       
-            v_texcoord0 = a_uv0;
-            v_texcoord1 = a_uv1;
-            v_texcoord2 = a_uv2;
+            v_texcoord = a_texcoord.xy;
+            v_textureIndex = a_texcoord.z;
 
           }`;
         let fragment_shader = `
           precision mediump float;
   
           // Variables del shader de fragmentos
-          varying vec2 v_texcoord0;
-          varying vec2 v_texcoord1;
-          varying vec2 v_texcoord2;
+          varying vec2 v_texcoord;
+          varying float v_textureIndex;
 
           // Texturas 
           uniform sampler2D u_texture0;
           uniform sampler2D u_texture1;
           uniform sampler2D u_texture2;
+          uniform sampler2D u_texture3;
+          uniform sampler2D u_texture4;
+          uniform sampler2D u_texture5;
       
           void main() {
+            vec4 color;
+            // como v_textureIndex es un varying estos valores se interpolan, entonces por alguna razón los valores no se mantienen exactamente iguales, por lo que no se puede comparar v_textureIndex == 0.0, sino que hay que ver que este dentro de un intervalo
 
-            // Coordenadas aplicadas
-            vec4 color0 = texture2D(u_texture0, v_texcoord0);
-            vec4 color1 = texture2D(u_texture1, v_texcoord1);
-            vec4 color2 = texture2D(u_texture2, v_texcoord2);
+            if ((v_textureIndex) >= 0.0 && (v_textureIndex) < 0.9) {
+              color = texture2D(u_texture0, v_texcoord);
+            }
+            else if ((v_textureIndex) >= 0.9 && (v_textureIndex) < 1.9) {
+              color = texture2D(u_texture1, v_texcoord);
+            }
+            else if ((v_textureIndex) >= 1.9 && (v_textureIndex) < 2.9) {
+              color = texture2D(u_texture2, v_texcoord);
+            }
+            else if ((v_textureIndex) >= 2.9 && (v_textureIndex) < 3.9) {
+              color = texture2D(u_texture3, v_texcoord);
+            }
+            else if ((v_textureIndex) >= 3.9 && (v_textureIndex) < 4.9) {
+              color = texture2D(u_texture4, v_texcoord);
+            }
+            else if ((v_textureIndex) >= 4.9 && (v_textureIndex) < 5.9) {
+              color = texture2D(u_texture5, v_texcoord);
+            }
 
+            //gl_FragColor = vec4(v_textureIndex/6.0, 0, 0, 1);
+            gl_FragColor = color;
 
-            gl_FragColor = texture2D(u_texture0, v_texcoord0);
           }`;
   
         super(gl, vertex_shader, fragment_shader);
