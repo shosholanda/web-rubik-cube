@@ -1,7 +1,10 @@
 body {
-  background: #bfbfbf;
+  background: #f0f0f0;
 }
 
 canvas {
-  border: 1px dotted white;
+  display: block;
+  margin: auto;
+  width: 100vh;
+  height: 100vh;
 }

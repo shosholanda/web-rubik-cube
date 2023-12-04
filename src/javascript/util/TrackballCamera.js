@@ -25,6 +25,20 @@ var CG = (function(CG) {
 	  getMatrix() {
 		return CG.Matrix4.lookAt(this.pos, this.coi, this.up);
 	  }
+
+	zoom(delta){
+		if (this.radius > 30 && delta > 0)
+			return
+		if (this.radius < 2 && delta < 0)
+			return
+		let direction = CG.Vector3.subtract(this.pos, this.coi).scalar(0.1);
+		if (delta > 0)
+			this.pos = CG.Vector3.add(this.pos, direction);
+		else
+			this.pos = CG.Vector3.subtract(this.pos, direction);
+		this.radius = CG.Vector3.distance(this.pos, this.coi);
+		//console.log(this.radius)
+	  }
   
 	  /** */
 	  finishMove(init_mouse, current_mouse) {
@@ -74,6 +88,12 @@ var CG = (function(CG) {
 		canvas.addEventListener("mousedown", (evt) => {
 		  initial_mouse_position = CG.getMousePositionInElement(evt, canvas);
 		  window.addEventListener("mousemove", mousemove);
+		});
+
+		window.addEventListener("wheel", event => {
+			const delta = Math.sign(event.deltaY);
+			this.zoom(delta)
+			draw_callback();
 		});
 	
 		/**

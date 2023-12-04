@@ -26,7 +26,7 @@ var CG = (function(CG) {
         let fragment_shader = `
           precision mediump float;
   
-          // Variables del shader de fragmentos
+          // Variables del shader de vertices
           varying vec2 v_texcoord;
           varying float v_textureIndex;
 

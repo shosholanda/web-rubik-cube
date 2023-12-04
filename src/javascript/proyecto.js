@@ -23,7 +23,7 @@ window.addEventListener("load", async function(evt) {
 	/////////////////////////////////////////
 	//  Camara
 	let aspect = gl.canvas.width/gl.canvas.height;
-	let zNear = 1;
+	let zNear = 0.1;
 	let zFar = 2000;
 	let projectionMatrix = CG.Matrix4.perspective(75*Math.PI/180, aspect, zNear, zFar);
 
@@ -45,14 +45,16 @@ window.addEventListener("load", async function(evt) {
 	let white = await CG.loadImage("../../textures/img/White.png");
 	let yellow = await CG.loadImage("../../textures/img/Yellow.png");
 	
-	
+	let color = [1, 1, 1, 1]
 
     let geometry = [
 		new CG.PrismaRectangular(
 			gl,
 			1, 1, 1,
-			new CG.TextureMaterial(gl, [blue, red, green, orange, white, yellow])
-		),
+			new CG.TextureMaterial(gl, [blue, red, green, orange, white, yellow]),
+			color,
+			CG.Matrix4.translate(new CG.Matrix4(), new CG.Vector3(0, 0, 0))
+		)
     ];
 
 	//////////////////////////////////////////
