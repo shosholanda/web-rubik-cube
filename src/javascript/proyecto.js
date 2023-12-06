@@ -46,7 +46,7 @@ window.addEventListener("load", async function(evt) {
 	let yellow = await CG.loadImage("../../textures/img/Yellow.png");
 	
 	let color = [1, 1, 1, 1]
-	let pos = CG.Matrix4.translate(new CG.Vector3(2, 2, 2));
+	let pos = CG.Matrix4.translate(new CG.Vector3(1, 0, 1)); //Coordenadas del mundo
 
     let geometry = [
 		new CG.Cubie(
@@ -54,11 +54,17 @@ window.addEventListener("load", async function(evt) {
 			new CG.TextureMaterial(gl, [green, red, blue, orange, yellow, white]),
 			new CG.Matrix4()
 		),
+
+		new CG.Center(
+			gl,
+			new CG.TextureMaterial(gl, [green, red, blue, orange, yellow, white]),
+			pos 
+		),
 		new CG.Teapot(
 			gl,
 			new CG.DiffuseMaterial(gl),
 			[.5, .5, 0, 1],
-			initial_transform = CG.Matrix4.translate(new CG.Vector3(-5, 0, -2))
+			CG.Matrix4.translate(new CG.Vector3(-5, 0, -2))
 		)
 		/* 
 		new CG.Cubie(
@@ -106,5 +112,5 @@ window.addEventListener("load", async function(evt) {
     draw();
 
 	camera.registerMouseEvents(canvas, draw);
-	geometry[0].registerCubeEvents(draw);
+	geometry[1].registerCubeEvents(draw);
 });
