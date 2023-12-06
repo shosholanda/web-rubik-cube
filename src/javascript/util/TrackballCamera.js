@@ -27,9 +27,9 @@ var CG = (function(CG) {
 	  }
 
 	zoom(delta){
-		if (this.radius > 30 && delta > 0)
+		if (this.radius >= 30 && delta > 0)
 			return
-		if (this.radius < 2 && delta < 0)
+		if (this.radius <= 2 && delta < 0)
 			return
 		let direction = CG.Vector3.subtract(this.pos, this.coi).scalar(0.1);
 		if (delta > 0)
@@ -37,7 +37,7 @@ var CG = (function(CG) {
 		else
 			this.pos = CG.Vector3.subtract(this.pos, direction);
 		this.radius = CG.Vector3.distance(this.pos, this.coi);
-		//console.log(this.radius)
+		console.log(this.radius)
 	  }
   
 	  /** */

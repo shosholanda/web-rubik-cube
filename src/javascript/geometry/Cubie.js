@@ -1,44 +1,91 @@
 var CG = (function(CG) {
 
-    class Cubie extends CG.GenericGeometry {
+	const escala = 1/3;
+	const angulo = Math.PI/10;
 
-	 /**
-     * 
-     */
-	 constructor(gl, material, color, initial_transform) {
-  
-		super(gl, material, color, initial_transform);
-	  }
-  
-	  /**
-	   */
-	  getVertices() {
-		return [
-            
-		];
-	  }
-  
-	  getNormals(vertices) {
-		let normals = [];
-		let v1 = new CG.Vector3();
-		let v2 = new CG.Vector3();
-		let v3 = new CG.Vector3();
-		let n;
-	  
-		for (let i=0; i<vertices.length; i+=9) {
-		  v1.set( vertices[i  ], vertices[i+1], vertices[i+2] );
-		  v2.set( vertices[i+3], vertices[i+4], vertices[i+5] );
-		  v3.set( vertices[i+6], vertices[i+7], vertices[i+8] );
-		  n = CG.Vector3.cross(CG.Vector3.subtract(v1, v2), CG.Vector3.subtract(v2, v3)).normalize();
-		  normals.push(
-			n.x, n.y, n.w, 
-			n.x, n.y, n.w, 
-			n.x, n.y, n.w
-		  );
+    class Cubie extends CG.PrismaRectangular {
+
+		/**
+		 * El cubo de rubik son puras rotaciones
+		 */
+		constructor(gl, material, initial_transform) {
+			
+			super(gl, escala, escala, escala, material, [], initial_transform);
+			
 		}
-  
-		return normals;
-	  }
+		/**
+		 * Rota este cubito sobre el eje x 90° horario
+		 */
+		rotarX_h(){
+			let m = CG.Matrix4.multiply(this.initial_transform, CG.Matrix4.rotateX(angulo))
+			this.initial_transform = m
+		}
+
+		/**
+		 * Rota este cubito sobre el eje x 90° horario
+		 */
+		rotarY_h(){
+			let m = CG.Matrix4.multiply(this.initial_transform, CG.Matrix4.rotateY(angulo))
+			this.initial_transform = m
+		}
+		
+		/**
+		 * Rota este cubito sobre el eje x 90° horario
+		 */
+		rotarZ_h(){
+			let m = CG.Matrix4.multiply(this.initial_transform, CG.Matrix4.rotateZ(angulo))
+			this.initial_transform = m
+		}
+
+		/**
+		 * Rota este cubito sobre el eje x 90° anti-horario
+		 */
+		rotarX_ah(){
+			let m = CG.Matrix4.multiply(this.initial_transform, CG.Matrix4.rotateX(-angulo))
+			this.initial_transform = m
+		}
+		
+		/**
+		 * Rota este cubito sobre el eje x 90° anti-horario
+		 */
+		rotarY_ah(){
+			let m = CG.Matrix4.multiply(this.initial_transform, CG.Matrix4.rotateY(-angulo))
+			this.initial_transform = m
+		}
+	
+		/**
+		 * Rota este cubito sobre el eje x 90° anti-horario
+		 */
+		rotarZ_ah(){
+			let m = CG.Matrix4.multiply(this.initial_transform, CG.Matrix4.rotateZ(-angulo))
+			this.initial_transform = m
+		}
+
+		/** */
+		registerCubeEvents(draw_callback) {
+			window.addEventListener("keydown", (evt) => {
+				console.log(evt.key);
+				if (evt.key == "4") {
+				  this.rotarY_h()
+				}
+				else if (evt.key == "6") {
+				  this.rotarY_ah()  
+				}
+				else if (evt.key == "2") {
+				  this.rotarZ_ah()   
+				}
+				else if (evt.key == "5") {
+				  this.rotarZ_h(); 
+				}
+				else if (evt.key == "1") {
+					this.rotarX_h(); 
+				}
+				else if (evt.key == "3") {
+					this.rotarX_ah(); 
+				  }
+				draw_callback();
+			  });
+			}
 	}
 
 

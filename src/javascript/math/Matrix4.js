@@ -329,7 +329,7 @@ var CG = (function(CG) {
 	    return new Matrix4(1, 0, 0, 0,
 			       0, Math.cos(theta), -Math.sin(theta), 0,
 			       0, Math.sin(theta), Math.cos(theta), 0,
-			       0, 0, 1, 0);
+			       0, 0, 0, 1);
 	}
 
 	/**
