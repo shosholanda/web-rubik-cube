@@ -28,7 +28,7 @@ window.addEventListener("load", async function(evt) {
 	let projectionMatrix = CG.Matrix4.perspective(75*Math.PI/180, aspect, zNear, zFar);
 
     let camera = new CG.TrackballCamera(
-	new CG.Vector3(3, 3, 3),
+	new CG.Vector3(5, 5, 5),
 	new CG.Vector3(0, 0, 0),
 	new CG.Vector3(0, 1, 0)
     );
@@ -44,27 +44,52 @@ window.addEventListener("load", async function(evt) {
 	let orange = await CG.loadImage("../../textures/img/Orange.png");
 	let white = await CG.loadImage("../../textures/img/White.png");
 	let yellow = await CG.loadImage("../../textures/img/Yellow.png");
-	
+	let gray = await CG.loadImage("../../textures/img/Gray.png");
+	let col = [blue, red, green, orange, white, yellow, gray]
+	let colors = {
+		'blue': blue,
+		'red': red,
+		'green': green,
+		'orange': orange,
+		'white': white,
+		'yellow': yellow,
+		'gray': gray
+	}
 	let color = [1, 1, 1, 1]
-	let pos = CG.Matrix4.translate(new CG.Vector3(1, 0, 1)); //Coordenadas del mundo
+	let pos = new CG.Matrix4(); //Coordenadas del mundo
 
     let geometry = [
 		new CG.Cubie(
 			gl,
-			new CG.TextureMaterial(gl, [green, red, blue, orange, yellow, white]),
-			new CG.Matrix4()
+			new CG.TextureMaterial(gl, [gray, gray, gray, gray, gray, gray]),
+			pos
 		),
 
+		/* 
 		new CG.Center(
 			gl,
-			new CG.TextureMaterial(gl, [green, red, blue, orange, yellow, white]),
-			pos 
+			new CG.TextureMaterial(gl, [gray, gray, gray, gray, yellow, gray]),
+			pos
 		),
+		new CG.Edge(
+			gl,
+			new CG.TextureMaterial(gl, [green, gray, gray, gray, yellow, gray]),
+			pos
+		),
+		new CG.Vertex(
+			gl,
+			new CG.TextureMaterial(gl, [green, red, gray, gray, yellow, gray]),
+			pos
+			), */
 		new CG.Teapot(
 			gl,
 			new CG.DiffuseMaterial(gl),
 			[.5, .5, 0, 1],
 			CG.Matrix4.translate(new CG.Vector3(-5, 0, -2))
+		),
+		new CG.Rubik(
+			gl,
+			colors
 		)
 		/* 
 		new CG.Cubie(
@@ -99,7 +124,14 @@ window.addEventListener("load", async function(evt) {
 		lightPosView = viewMatrix.multiplyVector(lightPosition);
 		
 		for (let i=0; i<geometry.length; i++) {
-		  geometry[i].draw(
+			if (geometry[i].drawPieces)
+				geometry[i].drawPieces(
+					gl, 
+					projectionMatrix, 
+					viewMatrix, 
+					[lightPosView.x, lightPosView.y, -lightPosView.z]
+			)
+		  else geometry[i].draw(
 			gl, 
 			projectionMatrix, 
 			viewMatrix, 
@@ -112,5 +144,5 @@ window.addEventListener("load", async function(evt) {
     draw();
 
 	camera.registerMouseEvents(canvas, draw);
-	geometry[1].registerCubeEvents(draw);
+	
 });

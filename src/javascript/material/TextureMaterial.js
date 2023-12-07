@@ -95,7 +95,7 @@ var CG = (function(CG) {
           }
           this.textures.push(texture);
         }
-        console.log(this.textures);
+        //console.log(this.textures);
       }
     }
   
