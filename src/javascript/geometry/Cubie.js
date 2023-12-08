@@ -63,6 +63,11 @@ var CG = (function(CG) {
 			this.initial_transform = m
 		}
 
+		// Reincia los ejes a este cubie, aplicando la rotación (Ctrl A + R en blender)
+		apply_transform(){
+
+		}
+
 		/** */
 		registerCubeEvents(draw_callback) {
 			window.addEventListener("keydown", (evt) => {
@@ -84,7 +89,15 @@ var CG = (function(CG) {
 				}
 				else if (evt.key == "3") {
 					this.rotarX_ah(); 
-				  }
+				}
+				else if (evt.key.toUpperCase() == "U"){
+					if (evt.shiftKey) this.u_prime_turn();
+					else this.u_turn();
+				}
+				else if (evt.key.toUpperCase() == "R"){
+					if (evt.shiftKey) this.r_prime_turn();
+					else this.r_turn();
+				}
 				draw_callback();
 			  });
 			}

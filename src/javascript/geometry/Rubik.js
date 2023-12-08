@@ -42,7 +42,9 @@ var CG = (function(CG) {
         let r = new CG.Center(gl, new CG.TextureMaterial(gl, this.getCenterColor(this.red)), pos);
         r.rotarX_h()
         let g = new CG.Center(gl, new CG.TextureMaterial(gl, this.getCenterColor(this.green)), pos);
-        g.rotarZ_ah();
+        g.rotarY_h()
+        g.rotarY_h();
+        g.rotarZ_h();
         let o = new CG.Center(gl, new CG.TextureMaterial(gl, this.getCenterColor(this.orange)), pos);
         o.rotarX_ah();
         let b = new CG.Center(gl, new CG.TextureMaterial(gl, this.getCenterColor(this.blue)), pos);
@@ -113,7 +115,7 @@ var CG = (function(CG) {
         wbo.rotarZ_h();
         wbo.rotarZ_h();
 
-
+        //Todas las piezas
         pieces.push(
             y, r, g, o, b, w,
 
@@ -125,6 +127,109 @@ var CG = (function(CG) {
             rwg, wog, wrb, wbo
 
         );
+
+
+        // LLenar capa U inicialmente
+        //El índice determina cada pieza visto desde arriba
+        //      Naranja
+        // A ------------- V
+        // Z | 0 | 1 | 2 | E
+        //   -------------
+        // U | 3 | 4 | 5 | R
+        //   ------------- 
+        // L | 6 | 7 | 8 | D
+        //   ------------- E
+        //       ROJO 
+        up.push(
+            yob, yo, ygo,
+            yb, y, yg,
+            ybr, yr, yrg
+        )
+
+        // LLenar capa D inicialmente
+        //El índice determina cada pieza visto desde arriba
+        //      ROJO
+        // A ------------- V
+        // Z | 0 | 1 | 2 | E
+        //   -------------
+        // U | 3 | 4 | 5 | R
+        //   ------------- 
+        // L | 6 | 7 | 8 | D
+        //   ------------- E
+        //      NARANJA 
+        down.push(
+            wrb, wr, rwg,
+            wb, w, wg,
+            wbo, wo, wog
+        )
+
+        // LLenar capa F inicialmente
+        //El índice determina cada pieza visto desde arriba
+        //      AMARILLO
+        // A ------------- V
+        // Z | 0 | 1 | 2 | E
+        //   -------------
+        // U | 3 | 4 | 5 | R
+        //   ------------- 
+        // L | 6 | 7 | 8 | D
+        //   ------------- E
+        //      BLANCO 
+        front.push(
+            ybr, yr, yrg,
+            rb, r, rg, 
+            wrb, wr, rwg
+        )
+
+        // LLenar capa B inicialmente
+        //El índice determina cada pieza visto desde arriba
+        //      BLANCO
+        // A ------------- V
+        // Z | 0 | 1 | 2 | E
+        //   -------------
+        // U | 3 | 4 | 5 | R
+        //   ------------- 
+        // L | 6 | 7 | 8 | D
+        //   ------------- E
+        //      AMARILLO 
+        back.push(
+            wbo, wo, wog,
+            ob, o, og,
+            yob, yo, ygo
+        )
+
+        // LLenar capa L inicialmente
+        //El índice determina cada pieza visto desde arriba
+        //      AMARILLO
+        // N ------------- 
+        // A | 0 | 1 | 2 | R
+        // R ------------- O
+        // A | 3 | 4 | 5 | 
+        // N ------------- J
+        // J | 6 | 7 | 8 | O
+        // A ------------- 
+        //      BLANCO 
+        left.push(
+            yob, yo, ybr,
+            ob, b, rb,
+            wbo, wb, wrb
+        )
+
+        // LLenar capa R inicialmente
+        //El índice determina cada pieza visto desde arriba
+        //      AMARILLO
+        // R ------------- N
+        // O | 0 | 1 | 2 | A
+        //   ------------- R
+        //   | 3 | 4 | 5 | A
+        //   ------------- N
+        // J | 6 | 7 | 8 | J
+        // O ------------- A
+        //      BLANCO 
+        right.push(
+            yrg, yg, ygo,
+            rg, g, og,
+            rwg, wg, wog
+        )
 
         }
 
@@ -145,7 +250,140 @@ var CG = (function(CG) {
             return [color_right, color_left, this.gray, this.gray, color_up, this.gray]
         }
         
+        //Gira en U horario
         u_turn(){
+            up.forEach(e => e.rotarY_h())
+            let tmp1 = [left[0], left[1], left[2]]
+
+            // Actualizar caras laterales
+            left[0] = front[0]
+            left[1] = front[1]
+            left[2] = front[2]
+
+            front[0] = right[0]
+            front[1] = right[1]
+            front[2] = right[2]
+
+            right[0] = back[0]
+            right[1] = back[1]
+            right[2] = back[2]
+
+            back[0] = tmp1[0]
+            back[1] = tmp1[1]
+            back[2] = tmp1[2]
+
+            this.actualizar_cara(up, true);
+        }
+
+        //Gira en U' antihorario
+        u_prime_turn(){
+            up.forEach(e => e.rotarY_ah())
+            let tmp1 = [left[0], left[1], left[2]]
+
+            // Actualizar caras laterales
+            left[0] = back[0]
+            left[1] = back[1]
+            left[2] = back[2]
+
+            back[0] = right[0]
+            back[1] = right[1]
+            back[2] = right[2]
+
+            right[0] = front[0]
+            right[1] = front[1]
+            right[2] = front[2]
+
+            front[0] = tmp1[0]
+            front[1] = tmp1[1]
+            front[2] = tmp1[2]
+
+            this.actualizar_cara(up, false);
+        }
+
+        // Gira en R horario
+        r_turn(){
+            right.forEach(e => e.rotarX_h())
+            /* let tmp1 = [left[0], left[1], left[2]]
+
+            // Actualizar caras laterales
+            left[0] = back[0]
+            left[1] = back[1]
+            left[2] = back[2]
+
+            back[0] = right[0]
+            back[1] = right[1]
+            back[2] = right[2]
+
+            right[0] = front[0]
+            right[1] = front[1]
+            right[2] = front[2]
+
+            front[0] = tmp1[0]
+            front[1] = tmp1[1]
+            front[2] = tmp1[2]
+
+            this.actualizar_cara(up, true); */
+        }
+
+        r_prime_turn(){
+            right.forEach(e => e.rotarX_ah())
+            /* let tmp1 = [left[0], left[1], left[2]]
+
+            // Actualizar caras laterales
+            left[0] = back[0]
+            left[1] = back[1]
+            left[2] = back[2]
+
+            back[0] = right[0]
+            back[1] = right[1]
+            back[2] = right[2]
+
+            right[0] = front[0]
+            right[1] = front[1]
+            right[2] = front[2]
+
+            front[0] = tmp1[0]
+            front[1] = tmp1[1]
+            front[2] = tmp1[2]
+
+            this.actualizar_cara(up, false); */
+        }
+
+        /**
+         * Actualiza la nueva posición de una cara vista de frente
+         * aplicando un giro horario u antihorario
+         * @param {*} face 
+         * @param {*} horario 
+         */
+        actualizar_cara(face, horario){
+            if (horario){
+                let vert_tmp = face[0]
+                let ed_tmp = face[1]
+                face[0] = face[6]
+                face[6] = face[8]
+                face[8] = face[2]
+                face[2] = vert_tmp
+
+                face[1] = face[3]
+                face[3] = face[7]
+                face[7] = face[5]
+                face[5] = ed_tmp
+            } else {
+                let vert_tmp = face[0]
+                let ed_tmp = face[1]
+                face[0] = face[2]
+                face[2] = face[8]
+                face[8] = face[6]
+                face[6] = vert_tmp
+
+                face[1] = face[5]
+                face[5] = face[7]
+                face[7] = face[3]
+                face[3] = ed_tmp
+            }
+        }
+
+        scramble(){
 
         }
 	}

@@ -57,14 +57,15 @@ window.addEventListener("load", async function(evt) {
 	}
 	let color = [1, 1, 1, 1]
 	let pos = new CG.Matrix4(); //Coordenadas del mundo
+	let rubik = new CG.Rubik(gl, colors);
 
     let geometry = [
 		new CG.Cubie(
 			gl,
-			new CG.TextureMaterial(gl, [gray, gray, gray, gray, gray, gray]),
+			new CG.TextureMaterial(gl, col),
 			pos
-		),
-
+		), 
+		rubik,
 		/* 
 		new CG.Center(
 			gl,
@@ -86,10 +87,6 @@ window.addEventListener("load", async function(evt) {
 			new CG.DiffuseMaterial(gl),
 			[.5, .5, 0, 1],
 			CG.Matrix4.translate(new CG.Vector3(-5, 0, -2))
-		),
-		new CG.Rubik(
-			gl,
-			colors
 		)
 		/* 
 		new CG.Cubie(
@@ -144,5 +141,6 @@ window.addEventListener("load", async function(evt) {
     draw();
 
 	camera.registerMouseEvents(canvas, draw);
-	
+	//geometry[0].registerCubeEvents(draw)
+	rubik.registerCubeEvents(draw);
 });
