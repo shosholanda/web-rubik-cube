@@ -10,6 +10,7 @@ var CG = (function(CG) {
         color = [1,0,0,1], 
         initial_transform = new CG.Matrix4()
       ) {
+        this.gl = gl
         this.smooth = false;
         this.material = material;
         this.color = color;
@@ -67,6 +68,7 @@ var CG = (function(CG) {
         // si la función getFaces no existe entonces el objeto esta definido directamente con un arreglo de vértices
         else {
           let vertices = this.getVertices();
+          this.vertices = vertices;
           let normals = this.getNormals(vertices);
   
           // creación del buffer de datos del prisma

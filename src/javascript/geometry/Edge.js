@@ -12,8 +12,8 @@ var CG = (function(CG) {
          * [Up, Bottom]  Eje Y (z en blender) 
          * [Front, Back] Eje Z (y en blender)
 		*/
-		constructor(gl, color_centro, initial_transform) {
-            super(gl, color_centro, initial_transform);
+		constructor(gl, color_centro, initial_transform, tag) {
+            super(gl, color_centro, initial_transform, tag);
 		}
 
         getVertices() {

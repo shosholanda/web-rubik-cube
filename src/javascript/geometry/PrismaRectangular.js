@@ -50,7 +50,7 @@ var CG = (function(CG) {
 	  /**
 	   */
 	  getVertices() {
-		return [
+		let v = [
 		  g_width,  g_height, -g_length,  g_width, -g_height,  g_length,  g_width, -g_height, -g_length,
 		  g_width,  g_height, -g_length,  g_width,  g_height,  g_length,  g_width, -g_height,  g_length,
   
@@ -69,6 +69,8 @@ var CG = (function(CG) {
 		  g_width, -g_height, -g_length,  -g_width, -g_height,  g_length,  -g_width, -g_height, -g_length,
 		  g_width, -g_height, -g_length,  g_width, -g_height,  g_length,  -g_width, -g_height,  g_length,
 		];
+		this.vertices = v;
+		return v;
 	  }
   
 	  getNormals(vertices) {

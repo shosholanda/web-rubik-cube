@@ -6,8 +6,8 @@ var CG = (function(CG) {
 		 * Tiene los movimientos de un centro
          * Los centros se pueden mover como M y M' en cualquier eje 
 		*/
-		constructor(gl, color_centro, initial_transform) {
-            super(gl, color_centro, initial_transform);
+		constructor(gl, color_centro, initial_transform, tag) {
+            super(gl, color_centro, initial_transform, tag);
 		}
 
 

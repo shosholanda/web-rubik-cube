@@ -64,7 +64,7 @@ window.addEventListener("load", async function(evt) {
 			gl,
 			new CG.TextureMaterial(gl, col),
 			pos
-		), 
+		),
 		rubik,
 		/* 
 		new CG.Center(
