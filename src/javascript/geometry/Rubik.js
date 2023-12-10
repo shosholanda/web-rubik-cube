@@ -1,6 +1,6 @@
 var CG = (function(CG) {
 
-    /* Cubies en 3 dimensiones */
+    /* Capas de piezas para girar */
     let pieces = []
     let up = [] 
     let down = []
@@ -8,9 +8,11 @@ var CG = (function(CG) {
     let back = []
     let right = []
     let left = []
-    let mid_x = []
-    let mid_y = []
-    let mid_z = []
+
+    /* Angulo de rotación para animación */
+    const frac = Math.PI/10
+    /* Angulo de rotación */
+    const angle = Math.PI/2
 
     /**
      * Construye un Cubo rubik 3x3 usando los 3 tipos de piezas
@@ -123,7 +125,6 @@ var CG = (function(CG) {
 
             yrg, ygo, yob, ybr,
             rwg, wog, wrb, wbo
-
         );
 
 
@@ -228,29 +229,44 @@ var CG = (function(CG) {
             rg, g, og,
             rwg, wg, wog
         )
-        this.print()
 
         }
 
+        /**
+         * Función para dibujar cada una de las piezas usando draw() de super
+         * @param {*} gl 
+         * @param {*} projectionMatrix 
+         * @param {*} viewMatrix 
+         * @param {*} light_pos 
+         */
         drawPieces(gl, projectionMatrix, viewMatrix, light_pos){
             for (let i = 0; i < pieces.length; i++){
                 pieces[i].draw(gl, projectionMatrix, viewMatrix, light_pos)
             }
         }
+
+        /* Obtiene los colores necesarios para colorear una sola cara de un cubie*/
         getCenterColor(color){
             return [this.gray, this.gray, this.gray, this.gray, color, this.gray]
         }
 
+        /* Obtiene los colores necesarios para colorear dos caras de un cubie */
         getEdgeColor(color_up, color_side){
             return [color_side, this.gray, this.gray, this.gray, color_up, this.gray]
         }
         
+        /* Obtiene los colores necesarios para colorear tres caras de un cubie */
         getVertexColor(color_up, color_left, color_right){
             return [color_right, color_left, this.gray, this.gray, color_up, this.gray]
         }
+
         
-        //Gira en U horario
+        /**
+         * Gira la capa U en sentido horario
+         */
         u_turn(){
+            // No pude hacer que este foreach dibujara 10 veces la rotación Math.PI/20 antes de actualizar caras 
+            // y se viera como animación
             up.forEach(e => e.rotarY_h())
             
             let tmp = [right[0], right[1], right[2]]
@@ -273,7 +289,9 @@ var CG = (function(CG) {
             this.actualizar_cara(up, true)
         }
 
-        //Gira en U' antihorario
+        /**
+         * Gira la capa U en sentido antihorario
+         */
         u_prime_turn(){
             up.forEach(e => e.rotarY_ah())
             
@@ -297,7 +315,9 @@ var CG = (function(CG) {
             this.actualizar_cara(up, false)
         }
 
-        // Gira en R horario
+        /**
+         * Gira la capa R en sentido horario como se sabe del cubo
+         */
         r_turn(){
             right.forEach(e => e.rotarX_ah())
             
@@ -321,7 +341,9 @@ var CG = (function(CG) {
             this.actualizar_cara(right, true)
         }
 
-        // Gira en R antihorario
+        /**
+         * Gira la capa R en sentido antihorario
+         */
         r_prime_turn(){
             right.forEach(e => e.rotarX_h())
             
@@ -345,7 +367,9 @@ var CG = (function(CG) {
             this.actualizar_cara(right, false)
         }
 
-        // Gira en F horario
+        /**
+         * Gira la capa F en sentido horario
+         */
         f_turn(){
             front.forEach(e => e.rotarZ_ah())
             
@@ -369,7 +393,9 @@ var CG = (function(CG) {
             this.actualizar_cara(front, true)
         }
 
-        // Gira en F antihorario
+        /**
+         * Gira la capa F en sentido antihorario
+         */
         f_prime_turn(){
             front.forEach(e => e.rotarZ_h())
             
@@ -393,7 +419,9 @@ var CG = (function(CG) {
             this.actualizar_cara(front, false)
         }
 
-        // Gira en D horario
+        /**
+         * Gira la capa D en sentido horario
+         */
         d_turn(){
             down.forEach(e => e.rotarY_ah())
 
@@ -417,6 +445,9 @@ var CG = (function(CG) {
             this.actualizar_cara(down, true)
         }
 
+        /**
+         * Gira la capa D en sentido antihorario
+         */
         d_prime_turn(){
             down.forEach(e => e.rotarY_h())
 
@@ -440,6 +471,9 @@ var CG = (function(CG) {
             this.actualizar_cara(down, false)
         }
 
+        /**
+         * Gira la capa L en sentido horario
+         */
         l_turn(){
             left.forEach(e => e.rotarX_h())
 
@@ -461,9 +495,11 @@ var CG = (function(CG) {
             front[6] = tmp[2]
 
             this.actualizar_cara(left, true)
-            this.print()
         }
 
+        /**
+         * Gira la capa L en sentido antihorario
+         */
         l_prime_turn(){
             left.forEach(e => e.rotarX_ah())
 
@@ -487,6 +523,9 @@ var CG = (function(CG) {
             this.actualizar_cara(left, false)
         }
 
+        /**
+         * Gira la capa B en sentido horario
+         */
         b_turn(){
             back.forEach(e => e.rotarZ_h())
 
@@ -511,6 +550,9 @@ var CG = (function(CG) {
 
         }
 
+        /**
+         * Gira la capa B en sentido antihorario
+         */
         b_prime_turn(){
             back.forEach(e => e.rotarZ_ah())
 
@@ -532,7 +574,6 @@ var CG = (function(CG) {
             right[8] = tmp[2]
 
             this.actualizar_cara(back, false)
-            this.print()
         }
 
         // Para debugear. Bastante util
@@ -599,10 +640,58 @@ var CG = (function(CG) {
             }
         }
 
+        /**
+         * Revuelve este cubo de manera aleatoria.
+         */
         scramble(){
-
+            for (let i = 0; i < 20; i++){
+                let r = Math.floor(Math.random()*12)
+                switch(r){
+                    case 0:
+                        this.u_turn()
+                        break;
+                    case 1:
+                        this.u_prime_turn()
+                        break;
+                    case 2: 
+                        this.b_turn()
+                        break;
+                    case 3: 
+                        this.b_prime_turn()
+                        break;
+                    case 4: 
+                        this.d_turn()
+                        break;
+                    case 5: 
+                        this.d_prime_turn()
+                        break;
+                    case 6:
+                        this.f_turn()
+                        break;
+                    case 7: 
+                        this.f_prime_turn()
+                        break;
+                    case 8:
+                        this.l_turn()
+                        break
+                    case 9:
+                        this.l_prime_turn()
+                        break
+                    case 10:
+                        this.r_turn()
+                        break;
+                    case 11:
+                        this.r_prime_turn()
+                        break
+                    default:
+                        break
+                }
+            }
         }
 
+        /**
+         * Nos dice si ya ha sido resuelto este cubo (To-Do)
+         */
         isDone(){}
 	}
 

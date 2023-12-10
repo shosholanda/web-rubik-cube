@@ -16,6 +16,10 @@ var CG = (function(CG) {
             super(gl, color_centro, initial_transform, tag);
 		}
 
+        /**
+         * Sobreescribimos para obtener un cubo elevado y movido en 1 del cubo origen
+         * @returns 
+         */
         getVertices() {
             let w = 1;
             let h = 1;

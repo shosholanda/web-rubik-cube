@@ -11,6 +11,10 @@ var CG = (function(CG) {
 		}
 
 
+        /**
+         * Sobreescribimos para tener un cubo elevado por 1 del cubo origen
+         * @returns 
+         */
         getVertices() {
             let w = 1;
             let h = 1;

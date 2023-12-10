@@ -17,19 +17,30 @@ var CG = (function(CG) {
 		this.phi = Math.atan2(direction.y, direction.w);
 	  }
 
+	  /**
+	   * Nos regresa la posición de la cámara
+	   * @returns 
+	   */
 	  getPos(){
 		return new CG.Vector4(this.pos.x, this.pos.y, this.pos.z, 1);
 	  }
   
-	  /** */
+	  /** 
+	   * Nos regresa la matríz de la cámara
+	  */
 	  getMatrix() {
 		return CG.Matrix4.lookAt(this.pos, this.coi, this.up);
 	  }
 
+	  /**
+	   * Nos acerca o aleja del origen del mundo usando dolly moves
+	   * @param {*} delta la distancia que se aleja o se acerca
+	   * @returns 
+	   */
 	zoom(delta){
 		if (this.radius >= 30 && delta > 0)
 			return
-		if (this.radius <= 2 && delta < 0)
+		if (this.radius <= 6 && delta < 0)
 			return
 		let direction = CG.Vector3.subtract(this.pos, this.coi).scalar(0.1);
 		if (delta > 0)
@@ -37,7 +48,7 @@ var CG = (function(CG) {
 		else
 			this.pos = CG.Vector3.subtract(this.pos, direction);
 		this.radius = CG.Vector3.distance(this.pos, this.coi);
-		console.log(this.radius)
+		//console.log(this.radius)
 	  }
   
 	  /** */
@@ -76,7 +87,7 @@ var CG = (function(CG) {
 		};
 	  }
   
-	  /** */
+	  /** Eventos del Mouse */
 	  registerMouseEvents(canvas, draw_callback) {
 		let initial_mouse_position = null;
 	
@@ -90,6 +101,10 @@ var CG = (function(CG) {
 		  window.addEventListener("mousemove", mousemove);
 		});
 
+		/**
+		 * Código que se ejecuta al usar la rueda del mouse o dos dedos del pad
+		 * Si es hacia arriba, se hace zoom, de lo contrario se hace zoom out
+		 */
 		window.addEventListener("wheel", event => {
 			const delta = Math.sign(event.deltaY);
 			this.zoom(delta)

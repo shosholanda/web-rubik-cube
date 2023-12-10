@@ -1,7 +1,6 @@
 var CG = (function(CG) {
 
 	const escala = 1;
-	const angulo = Math.PI/2;
 	
 	class Cubie extends CG.PrismaRectangular {
 		
@@ -13,58 +12,59 @@ var CG = (function(CG) {
 			
 			super(gl, escala, escala, escala, material, [], initial_transform);
 			this.escala = escala
-			this.angulo = angulo;
 			this.tag = tag
 		}
 		/**
 		 * Rota este cubito sobre el eje x 90° horario
 		 */
-		rotarX_h(){
-			let rot = CG.Matrix4.rotateX(this.angulo)
+		rotarX_h(angle = Math.PI/2){
+			let rot = CG.Matrix4.rotateX(angle)
 			this.apply_transform(rot);
 		}
 
 		/**
 		 * Rota este cubito sobre el eje x 90° horario
 		 */
-		rotarY_h(){
-			let rot = CG.Matrix4.rotateY(this.angulo);
+		rotarY_h(angle = Math.PI/2){
+			let rot = CG.Matrix4.rotateY(angle);
 			this.apply_transform(rot);
 		}
 		
 		/**
 		 * Rota este cubito sobre el eje x 90° horario
 		 */
-		rotarZ_h(){
-			let rot = CG.Matrix4.rotateZ(this.angulo)
+		rotarZ_h(angle = Math.PI/2){
+			let rot = CG.Matrix4.rotateZ(angle)
 			this.apply_transform(rot);
 		}
 
 		/**
 		 * Rota este cubito sobre el eje x 90° anti-horario
 		 */
-		rotarX_ah(){
-			let rot = CG.Matrix4.rotateX(-this.angulo)
+		rotarX_ah(angle = Math.PI/2){
+			let rot = CG.Matrix4.rotateX(-angle)
 			this.apply_transform(rot);
 		}
 		
 		/**
 		 * Rota este cubito sobre el eje x 90° anti-horario
 		 */
-		rotarY_ah(){
-			let rot = CG.Matrix4.rotateY(-this.angulo)
+		rotarY_ah(angle = Math.PI/2){
+			let rot = CG.Matrix4.rotateY(-angle)
 			this.apply_transform(rot);
 		}
 	
 		/**
 		 * Rota este cubito sobre el eje x 90° anti-horario
 		 */
-		rotarZ_ah(){
-			let rot = CG.Matrix4.rotateZ(-this.angulo)
+		rotarZ_ah(angle = Math.PI/2){
+			let rot = CG.Matrix4.rotateZ(-angle)
 			this.apply_transform(rot);
 		}
 
-		// Reincia los ejes a este cubie, aplicando la rotación (Ctrl A + R en blender)
+		/** 
+		 * Reincia los ejes a este cubie, aplicando la rotación (Ctrl A + R en blender)
+		 */ 
 		apply_transform(rot_mat){
 			let vertices = this.vertices;
 			let new_vert = []
@@ -89,29 +89,12 @@ var CG = (function(CG) {
           	this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(new_vert), this.gl.DYNAMIC_DRAW);
 		}
 
-		/** */
+		/** 
+		 * Registra las teclas para girar caras
+		 */
 		registerCubeEvents(draw_callback) {
 			window.addEventListener("keydown", (evt) => {
-				console.log(evt.key);
-				if (evt.key == "4") {
-				  this.rotarY_h()
-				}
-				else if (evt.key == "6") {
-				  this.rotarY_ah()  
-				}
-				else if (evt.key == "2") {
-				  this.rotarZ_ah()   
-				}
-				else if (evt.key == "5") {
-				  this.rotarZ_h(); 
-				}
-				else if (evt.key == "1") {
-					this.rotarX_h(); 
-				}
-				else if (evt.key == "3") {
-					this.rotarX_ah(); 
-				}
-				else if (evt.key.toUpperCase() == "U"){
+				if (evt.key.toUpperCase() == "U"){
 					if (evt.shiftKey) this.u_prime_turn();
 					else this.u_turn();
 				}

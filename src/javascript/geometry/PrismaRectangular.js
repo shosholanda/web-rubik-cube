@@ -69,6 +69,7 @@ var CG = (function(CG) {
 		  g_width, -g_height, -g_length,  -g_width, -g_height,  g_length,  -g_width, -g_height, -g_length,
 		  g_width, -g_height, -g_length,  g_width, -g_height,  g_length,  -g_width, -g_height,  g_length,
 		];
+		// Guardar vértices para poder reutilizar en la aplicación de una transformacion
 		this.vertices = v;
 		return v;
 	  }

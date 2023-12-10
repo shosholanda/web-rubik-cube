@@ -1,12 +1,11 @@
 window.addEventListener("load", async function(evt) {
 
+	// El canvas
     let canvas = document.getElementById("the_canvas");
-
+	// Botón de revolver
+	let scramble = document.getElementById("scramble")
     const gl = canvas.getContext("webgl");
-
     if (!gl) throw "WebGL no soportado";
-
-
    
     /////////////////////////////////////////
 	//  Luz
@@ -37,7 +36,7 @@ window.addEventListener("load", async function(evt) {
 	//////////////////////////////////////////
 	
     /////////////////////////////////////////
-	//  Crear objetos con materiales
+	//  Cargar texturas
 	let blue = await CG.loadImage("../../textures/img/Blue.png");
 	let red = await CG.loadImage("../../textures/img/Red.png");
 	let green = await CG.loadImage("../../textures/img/Green.png");
@@ -45,7 +44,6 @@ window.addEventListener("load", async function(evt) {
 	let white = await CG.loadImage("../../textures/img/White.png");
 	let yellow = await CG.loadImage("../../textures/img/Yellow.png");
 	let gray = await CG.loadImage("../../textures/img/Gray.png");
-	let col = [blue, red, green, orange, white, yellow, gray]
 	let colors = {
 		'blue': blue,
 		'red': red,
@@ -55,52 +53,8 @@ window.addEventListener("load", async function(evt) {
 		'yellow': yellow,
 		'gray': gray
 	}
-	let color = [1, 1, 1, 1]
-	let pos = new CG.Matrix4(); //Coordenadas del mundo
+	
 	let rubik = new CG.Rubik(gl, colors);
-
-    let geometry = [
-		new CG.Cubie(
-			gl,
-			new CG.TextureMaterial(gl, col),
-			pos
-		),
-		rubik,
-		/* 
-		new CG.Center(
-			gl,
-			new CG.TextureMaterial(gl, [gray, gray, gray, gray, yellow, gray]),
-			pos
-		),
-		new CG.Edge(
-			gl,
-			new CG.TextureMaterial(gl, [green, gray, gray, gray, yellow, gray]),
-			pos
-		),
-		new CG.Vertex(
-			gl,
-			new CG.TextureMaterial(gl, [green, red, gray, gray, yellow, gray]),
-			pos
-			), */
-		new CG.Teapot(
-			gl,
-			new CG.DiffuseMaterial(gl),
-			[.5, .5, 0, 1],
-			CG.Matrix4.translate(new CG.Vector3(-5, 0, -2))
-		)
-		/* 
-		new CG.Cubie(
-			gl,
-			new CG.TextureMaterial(gl, [green, red, blue, orange, yellow, white]),
-			new CG.Matrix4()
-		),
-		new CG.Cubie(
-			gl,
-			new CG.TextureMaterial(gl, [green, red, blue, orange, yellow, white]),
-			CG.Matrix4.translate(new CG.Vector3(-1, -1, -1))
-		), */
-		
-    ];
 
 	//////////////////////////////////////////
 
@@ -112,7 +66,6 @@ window.addEventListener("load", async function(evt) {
     // se encapsula el código de dibujo en una función
     function draw() {
 		gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-	
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
 		viewMatrix = camera.getMatrix();
@@ -120,27 +73,26 @@ window.addEventListener("load", async function(evt) {
 		lightPosition = camera.getPos();
 		lightPosView = viewMatrix.multiplyVector(lightPosition);
 		
-		for (let i=0; i<geometry.length; i++) {
-			if (geometry[i].drawPieces)
-				geometry[i].drawPieces(
-					gl, 
-					projectionMatrix, 
-					viewMatrix, 
-					[lightPosView.x, lightPosView.y, -lightPosView.z]
-			)
-		  else geometry[i].draw(
+		// Solo dibujamos 1 cubo rubik
+		rubik.drawPieces(
 			gl, 
 			projectionMatrix, 
 			viewMatrix, 
-			[lightPosView.x, lightPosView.y, -lightPosView.z] //No entiendo porqué es con -
-		  ); 
-		}
+			[lightPosView.x, lightPosView.y, -lightPosView.z]
+		)
 	  }
 
-    // se dibujan los objetos
     draw();
 
+	// Registrar eventos de movimiento de cámara
 	camera.registerMouseEvents(canvas, draw);
-	//geometry[0].registerCubeEvents(draw)
+	// Registrar eventos de movimiento de caras del cubo
 	rubik.registerCubeEvents(draw);
+	
+	// Botón de revolver
+	scramble.addEventListener("click", function() {
+		rubik.scramble()
+		draw()
+	})
+	
 });
